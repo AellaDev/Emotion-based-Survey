@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Evaluation Survey</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #d7f0d1;
+    }
+
+    header {
+      background-color: #006b4f;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 60px;
+      margin-right: 15px;
+    }
+
+    .logout-btn {
+      background-color: #b8e0c2;
+      color: #003d2e;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    p.description {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    .buttons {
+      margin-bottom: 60px;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+
+    .btn-primary {
+      background-color: #006b4f;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: #ffffff;
+      color: #333;
+      border: 2px solid #ccc;
+    }
+
+    .privacy {
+      font-size: 14px;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="{{ url_for('static', filename='images/chmsulogo.jpg') }}" alt="CHMSU Logo" class="logo">
+    <h2>EVALUATION SURVEY</h2>
+  </div>
+  <button class="logout-btn" onclick="logout()">LOGOUT</button>
+</header>
+
+<div class="container">
+  <h1 class="system-title" style="font-family: 'Lilita One', cursive;">Welcome to our Evaluation Survey </h1>
+  <p class="description">Your emotional responses help us improve our services. The survey will use your camera to detect emotions.</p>
+  <div class="buttons">
+    <button class="btn btn-primary" onclick="window.location.href='/student/survey'">Take Survey</button>
+    <button class="btn btn-secondary" onclick="window.location.href='/student/skip'">Skip for now</button>
+  </div>
+  <p class="privacy">
+    We value your privacy and are committed to protecting your personal data in accordance with Republic Act No. 10173 (Data Privacy Act of 2012). By using this website, you consent to the collection, processing, and storage of your personal information as outlined in this policy. We collect data such as your name, email address, and browsing activity to improve our services. Your information will not be shared with third parties without your consent, except as required by law. You have the right to access, correct, and request deletion of your data. For inquiries, contact [your email or support page].
+  </p>
+</div>
+
+<script>
+function logout() {
+  // For student: just redirect to /logout (which now just redirects to login)
+  window.location.href = '/logout';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Satisfaction Survey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: #1a8a5c;
+            padding: 8px 20px; /* Reduced padding for a smaller banner */
+            display: flex;
+            align-items: center;
+        }
+
+        .rating-scale {
+            background-color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .rating-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .rating-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .rating-5 { background-color: #1a8a5c; }
+        .rating-4 { background-color: #7cb342; }
+        .rating-3 { background-color: #ffd100; color: black; }
+        .rating-2 { background-color: #ff7043; }
+        .rating-1 { background-color: #e53935; }
+
+        .main-content {
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+            padding: 40px 20px;
+            min-height: 70vh;
+        }
+
+        .question-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #2e2e2e;
+            margin-bottom: 10px;
+        }
+
+        .question-number {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .content-area {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        .camera-section {
+            flex: 1;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2e2e2e;
+        }
+
+        .camera-feed {
+            width: 100%;
+            height: 300px;
+            background-color: #000;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .camera-feed img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .detected-section {
+            flex: 1;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .emotion-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2e2e2e;
+            margin: 20px 0;
+        }
+
+        .emoji {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .rating-result {
+            font-size: 24px;
+            font-weight: bold;
+            color: #7cb342;
+            margin: 20px 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #1a8a5c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #147a52;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #1a8a5c;
+            border: 2px solid #1a8a5c;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f0faf6;
+            transform: translateY(-2px);
+        }
+
+        .camera-status {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .status-loading { color: #ffa500; }
+        .status-ready { color: #28a745; }
+        .status-error { color: #dc3545; }
+
+        @media (max-width: 768px) {
+            .content-area {
+                flex-direction: column;
+            }
+            
+            .rating-scale {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .rating-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .question-title {
+                font-size: 24px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <!-- Removed the logo div -->
+        <!-- <div class="logo"></div> -->
+    </div>
+
+    <div class="main-content">
+        <h1 class="question-title">{{ question }}</h1>
+        <p class="question-number">Question {{ qidx }} of {{ total }}</p>
+
+        <div class="content-area">
+            <!-- CAMERA SECTION -->
+            <div class="camera-section">
+                <h2 class="section-title">Camera Feed</h2>
+                <div class="camera-feed" id="cameraFeed">
+                    <div id="loadingMessage">Initializing camera...</div>
+                    <!-- Replace video/canvas with img for backend stream -->
+                    <img id="cameraStream" src="" alt="Camera Feed" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                    <!-- <video id="video" autoplay playsinline muted style="display: none;"></video>
+                    <canvas id="canvas" style="display: none;"></canvas> -->
+                </div>
+                <div class="camera-status" id="cameraStatus">
+                    <span class="status-loading">Requesting camera access...</span>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 15px;" onclick="captureAndDetect()" id="detectBtn" disabled>Detect Emotion</button>
+            </div>
+
+            <!-- DETECTED SECTION -->
+            <div class="detected-section">
+                <h2 class="section-title">Detected Feed</h2>
+                <div class="emotion-display" id="emotionText">—</div>
+                <div class="emoji" id="emojiIcon">
+                    <img src="{{ url_for('static', filename='images/cam.png') }}" alt="Camera Icon" style="width: 80px; height: 80px;">
+                </div>
+                <div class="rating-result" id="ratingText">Please detect before proceeding</div>
+
+                <div class="button-group">
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="emotion" id="inputEmotion">
+                        <input type="hidden" name="answer" id="inputAnswer">
+                        <input type="hidden" name="question_id" value="{{ question_id }}">
+                        <input type="hidden" name="question_text" value="{{ question_text }}">
+                        <input type="hidden" name="timestamp" id="timestamp">
+                        <button class="btn btn-primary" type="submit">Accept & Continue</button>
+                    </form>
+                    <button class="btn btn-secondary" onclick="window.location.href='/student/skip'" type="button">Skip</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cameraStream = document.getElementById('cameraStream');
+        const inputEmotion = document.getElementById('inputEmotion');
+        const inputAnswer = document.getElementById('inputAnswer');
+        const timestampField = document.getElementById('timestamp');
+        const cameraFeed = document.getElementById('cameraFeed');
+        const cameraStatus = document.getElementById('cameraStatus');
+        const detectBtn = document.getElementById('detectBtn');
+        const loadingMessage = document.getElementById('loadingMessage');
+
+        // Camera is always ready if backend is streaming
+        let cameraReady = false;
+
+        // Initialize camera stream from backend
+        function initializeCamera() {
+            // Set the src to the backend MJPEG stream or JPEG endpoint
+            // Example: /camera_feed for MJPEG, or /camera_frame for periodic JPEG
+            cameraStream.src = "/camera_feed";
+            cameraStream.onload = function() {
+                loadingMessage.style.display = 'none';
+                cameraStream.style.display = 'block';
+                cameraStatus.innerHTML = '<span class="status-ready">Camera ready</span>';
+                detectBtn.disabled = false;
+                cameraReady = true;
+            };
+            cameraStream.onerror = function() {
+                cameraFeed.innerHTML = '<div class="error-message">Unable to load camera feed from server.</div>';
+                cameraStatus.innerHTML = '<span class="status-error">Camera unavailable</span>';
+                detectBtn.disabled = true;
+            };
+        }
+
+        // Capture and detect emotion by requesting backend to capture a frame
+        async function captureAndDetect() {
+            if (!cameraReady) {
+                alert('Camera is not ready. Please wait for camera initialization.');
+                return;
+            }
+
+            try {
+                detectBtn.disabled = true;
+                detectBtn.textContent = 'Detecting...';
+
+                // Request backend to capture a frame and detect emotion
+                const response = await fetch('/detect_emotion', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({}) // No image needed, backend uses camera
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                const emotion = data.emotion || "Unknown";
+                const emojis = {
+                    happy: "{{ url_for('static', filename='images/happy.png') }}",
+                    sad: "{{ url_for('static', filename='images/sad.png') }}",
+                    angry: "{{ url_for('static', filename='images/angry.png') }}",
+                    surprised: "{{ url_for('static', filename='images/surprised.png') }}",
+                    fearful: "{{ url_for('static', filename='images/fear.png') }}",
+                    disgust: "{{ url_for('static', filename='images/disgust.png') }}",
+                    neutral: "{{ url_for('static', filename='images/neutral.png') }}"
+                };
+
+                // 5-point Likert mapping
+                const likertMap = {
+                    happy: { scale: 5, label: "Very Satisfied" },
+                    surprised: { scale: 4, label: "Satisfied" },
+                    surprise: { scale: 4, label: "Satisfied" }, // add this line
+                    neutral: { scale: 3, label: "Neutral" },
+                    sad: { scale: 2, label: "Dissatisfied" },
+                    angry: { scale: 1, label: "Very Dissatisfied" },
+                    fearful: { scale: 2, label: "Dissatisfied" },
+                    disgust: { scale: 1, label: "Very Dissatisfied" }
+                };
+
+                const likert = likertMap[emotion.toLowerCase()] || { scale: 3, label: "Neutral" };
+
+                // Update UI
+                document.getElementById('emotionText').textContent = emotion.charAt(0).toUpperCase() + emotion.slice(1);
+                // Set emoji image based on detected emotion
+                const emojiIcon = document.getElementById('emojiIcon');
+                const emojiMap = {
+                    happy: "{{ url_for('static', filename='images/happy.png') }}",
+                    sad: "{{ url_for('static', filename='images/sad.png') }}",
+                    angry: "{{ url_for('static', filename='images/angry.png') }}",
+                    surprised: "{{ url_for('static', filename='images/surprised.png') }}",
+                    fearful: "{{ url_for('static', filename='images/fear.png') }}",
+                    disgust: "{{ url_for('static', filename='images/disgust.png') }}",
+                    neutral: "{{ url_for('static', filename='images/neutral.png') }}"
+                };
+                const imgSrc = emojiMap[emotion.toLowerCase()] || "{{ url_for('static', filename='images/neutral.png') }}";
+                emojiIcon.innerHTML = `<img src="${imgSrc}" alt="${emotion} emoji" style="width: 80px; height: 80px;">`;
+                document.getElementById('ratingText').textContent = `Likert: ${likert.scale} = ${likert.label}`;
+
+                // Update form fields
+                inputEmotion.value = emotion;
+                inputAnswer.value = likert.scale;
+                timestampField.value = new Date().toISOString();
+
+            } catch (error) {
+                console.error('Emotion detection error:', error);
+                alert(`Error detecting emotion: ${error.message}`);
+            } finally {
+                detectBtn.disabled = false;
+                detectBtn.textContent = 'Detect Emotion';
+            }
+        }
+
+        // Initialize camera when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initializeCamera, 500);
+        });
+
+        // Check if getUserMedia is supported
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            cameraFeed.innerHTML = '<div class="error-message">Camera access not supported in this browser</div>';
+            cameraStatus.innerHTML = '<span class="status-error">Browser not supported</span>';
+        }
+    </script>
+</body>
+</html>

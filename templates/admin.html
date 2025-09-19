@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CHMSU-A Evaluation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #a8d5a8 0%, #7fb87f 100%);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: #2d5a4f;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f0f0f0;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .admin-title {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            background: none;
+            margin-bottom: 0;
+            gap: 0;
+        }
+
+        .nav-tab {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .nav-tab.active {
+            background: #2d5a4f;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #5a6268;
+        }
+
+        /* Content Area */
+        .content-area {
+            background: white;
+            border-radius: 0 0 20px 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Questions Tab */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .add-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .questions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .questions-table th {
+            background: #e9ecef;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .questions-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            color: #495057;
+        }
+
+        .questions-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            color: #007bff;
+        }
+
+        .edit-btn:hover {
+            background: #e3f2fd;
+        }
+
+        .delete-btn {
+            color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background: #ffebee;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Results Tab */
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+
+        .filter-title {
+            font-size: 1rem;
+            color: #495057;
+            margin-bottom: 1rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .date-input {
+            padding: 0.75rem;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #fff;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #2d5a4f;
+        }
+
+        .apply-filter-btn {
+            background: #2d5a4f;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .apply-filter-btn:hover {
+            background: #1e3d34;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .results-table th {
+            background: #e9ecef;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .results-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            color: #495057;
+        }
+
+        /* Summary Tab */
+        .month-selector {
+            margin-bottom: 2rem;
+        }
+
+        .month-input {
+            padding: 0.75rem;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #fff;
+            width: 200px;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: #28a745;
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .summary-card .number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2d5a4f;
+        }
+
+        .averages-section {
+            margin-top: 2rem;
+        }
+
+        .averages-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .averages-table th {
+            background: #e9ecef;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .averages-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            color: #495057;
+        }
+
+        .emotion-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .emotion-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #28a745;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .admin-title {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .questions-table, .results-table, .averages-table {
+                font-size: 0.875rem;
+            }
+
+            .questions-table th, .questions-table td,
+            .results-table th, .results-table td,
+            .averages-table th, .averages-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='images/chmsulogo.jpg') }}" alt="CHMSU Logo" class="logo">
+        </div>
+        <div class="header-right">
+            <h1 class="admin-title">ADMIN</h1>
+            <button class="logout-btn" onclick="window.location.href = '/logout'">LOGOUT</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('questions')">Questions</button>
+            <button class="nav-tab" onclick="showTab('results')">Results</button>
+            <button class="nav-tab" onclick="showTab('summary')">Summary</button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Questions Tab -->
+            <div id="questions" class="tab-content active">
+                <div class="section-header">
+                    <h2 class="section-title">Survey Questions</h2>
+                    <form method="POST" action="{{ url_for('add_question') }}" style="display:inline;">
+                        <input type="text" name="text" placeholder="Add new question..." required style="padding:0.5rem; border-radius:10px; border:1px solid #ccc;">
+                        <button class="add-btn" type="submit">Add Question</button>
+                    </form>
+                </div>
+
+                <table class="questions-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Question</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for q in questions %}
+                        <tr>
+                            <td>{{ q.id }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('edit_question', question_id=q.id) }}" style="display:inline;">
+                                    <input type="text" name="text" value="{{ q.text }}" style="width:80%;padding:0.3rem;">
+                                    <button class="action-btn edit-btn" type="submit">Save</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('delete_question', question_id=q.id) }}" style="display:inline;" onsubmit="return confirm('Delete this question?');">
+                                    <button class="action-btn delete-btn" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if questions|length == 0 %}
+                <div id="emptyQuestionsMessage" class="empty-message">
+                    -- Nothing Follows --
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Results Tab -->
+            <div id="results" class="tab-content">
+                <h2 class="section-title">Survey Results</h2>
+                <div class="filter-section">
+                    <div class="filter-title">Filter by Date</div>
+                    <div class="filter-row">
+                        <input type="date" class="date-input" id="startDate" placeholder="mm/dd/yyyy">
+                        <input type="date" class="date-input" id="endDate" placeholder="mm/dd/yyyy">
+                        <button class="apply-filter-btn" onclick="applyFilter()">Apply Filter</button>
+                    </div>
+                </div>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Question</th>
+                            <th>Emotion</th>
+                            <th>Likert</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                        {% for r in responses %}
+                        <tr>
+                            <td>{{ r.timestamp }}</td>
+                            <td>{{ r.question }}</td>
+                            <td>{{ r.emotion }}</td>
+                            <td>{{ r.answer }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if responses|length == 0 %}
+                <div id="emptyResultsMessage" class="empty-message">
+                    -- No results to display --
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Summary Tab -->
+            <div id="summary" class="tab-content">
+                <h2 class="section-title">Monthly Summary</h2>
+                
+                <div class="month-selector">
+                    <div class="filter-title">Select Month</div>
+                    <input type="month" class="month-input" id="summaryMonth" onchange="updateSummary()">
+                </div>
+
+                <div class="summary-cards">
+                    <div class="summary-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <h3 style="width: 100%; text-align: center;">Total Surveys</h3>
+                        <div class="number" id="totalSurveys" style="font-size: 4.5rem; text-align: center; margin: 1.5rem 0;">0</div>
+                    </div>
+                </div>
+
+                <div class="averages-section">
+                    <h3 class="section-title">Question Averages</h3>
+                    <table class="averages-table">
+                        <thead>
+                            <tr>
+                                <th>Question</th>
+                                <th>Average Score</th>
+                                <th>Most Common Emotion</th>
+                            </tr>
+                        </thead>
+                        <tbody id="averagesTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        // Questions functionality
+
+        // Results functionality
+        function applyFilter() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+
+            // TODO: Replace with real API call to filter results
+        }
+
+        // Summary functionality
+        async function updateSummary() {
+            const selectedMonth = document.getElementById('summaryMonth').value;
+            const averagesTableBody = document.getElementById('averagesTableBody');
+            const totalSurveysElem = document.getElementById('totalSurveys');
+            if (!selectedMonth) return;
+
+            // Show loading message
+            averagesTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">Loading...</td></tr>`;
+            totalSurveysElem.textContent = '...';
+
+            try {
+                // Fetch summary data from backend
+                const summaryRes = await fetch(`/admin/summary_data?month=${selectedMonth}`);
+                if (!summaryRes.ok) throw new Error('Failed to fetch summary data');
+                const summary = await summaryRes.json();
+
+                // Set total surveys
+                totalSurveysElem.textContent = summary.total_surveys || 0;
+
+                // Populate averages table
+                averagesTableBody.innerHTML = '';
+                if (summary.questions && summary.questions.length > 0) {
+                    summary.questions.forEach(q => {
+                        // Emoji mapping (simple)
+                        const emotionEmoji = {
+                            'happy': '😊',
+                            'sad': '😢',
+                            'neutral': '😐',
+                            'angry': '😠',
+                            'surprised': '😲',
+                            'disgusted': '🤢',
+                            'fearful': '😨',
+                            // Add more as needed
+                        };
+                        // Always show the emoji only in the green circle, not in the text
+                        const emotionKey = q.emotion ? q.emotion.toLowerCase() : '';
+                        const emoji = emotionKey ? (emotionEmoji[emotionKey] || '') : '';
+                        averagesTableBody.innerHTML += `
+                            <tr>
+                                <td>${q.question}</td>
+                                <td>${q.avg_score !== null && q.avg_score !== undefined ? q.avg_score : '-'}</td>
+                                <td>
+                                    <div class="emotion-indicator">
+                                        <div class="emotion-icon">${emoji || '❓'}</div>
+                                        <span>
+                                            ${q.emotion ? q.emotion : '-'} (${q.emotion_percent || 0}%)
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    averagesTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No questions found.</td></tr>`;
+                }
+            } catch (err) {
+                averagesTableBody.innerHTML = `<tr><td colspan="3" style="color:red;text-align:center;">Error loading summary: ${err.message}</td></tr>`;
+                totalSurveysElem.textContent = '0';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current month as default
+            const currentDate = new Date();
+            const currentMonth = currentDate.toISOString().slice(0, 7);
+            document.getElementById('summaryMonth').value = currentMonth;
+            updateSummary();
+        });
+    </script>
+</body>
+</html>

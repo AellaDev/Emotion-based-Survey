@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CHMSU-A Evaluation System{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="welcome-card">
+        <h2>Welcome to CHMSU-A Evaluation System</h2>
+        <p>You are logged in as: <strong>{{ role }}</strong></p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'error' if category == 'error' else category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="dashboard-actions">
+            {% if role == 'Student' %}
+                <h3>Student Dashboard</h3>
+                <p>Here you can:</p>
+                <ul>
+                    <li>View available evaluations</li>
+                    <li>Submit course evaluations</li>
+                    <li>View your evaluation history</li>
+                </ul>
+            {% elif role == 'Admin' %}
+                <h3>Admin Dashboard</h3>
+                <p>Here you can:</p>
+                <ul>
+                    <li>Manage evaluation forms</li>
+                    <li>View evaluation reports</li>
+                    <li>Manage users and courses</li>
+                    <li>System configuration</li>
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="logout-section">
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.welcome-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.welcome-card h2 {
+    color: #2d5a4f;
+    margin-bottom: 1rem;
+}
+
+.dashboard-actions {
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.dashboard-actions h3 {
+    color: #2d5a4f;
+    margin-bottom: 1rem;
+}
+
+.dashboard-actions ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.dashboard-actions li {
+    background: #f8f9fa;
+    margin: 0.5rem 0;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #2d5a4f;
+}
+
+.btn-logout {
+    display: inline-block;
+    background-color: #dc3545;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+.logout-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+</style>
+{% endblock %}

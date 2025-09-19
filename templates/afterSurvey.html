@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Complete - Thank You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #c8e6c9, #a5d6a7, #b8d4ba);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .checkmark {
+            font-size: 120px;
+            color: #4caf50;
+            margin-bottom: 30px;
+            animation: checkmarkBounce 0.8s ease-out;
+        }
+
+        @keyframes checkmarkBounce {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2e2e2e;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 40px;
+            font-weight: normal;
+        }
+
+        .redirect-text {
+            font-size: 20px;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .countdown-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #1a8a5c;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(26, 138, 92, 0.3);
+        }
+
+        .countdown-circle::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 3px solid #4caf50;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #1a8a5c;
+            border-radius: 3px;
+            width: 0%;
+            animation: progressFill 5s linear;
+        }
+
+        @keyframes progressFill {
+            from {
+                width: 0%;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        .skip-link {
+            color: #1a8a5c;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: 2px solid #1a8a5c;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .skip-link:hover {
+            background-color: #1a8a5c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(26, 138, 92, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 32px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .redirect-text {
+                font-size: 16px;
+            }
+            
+            .checkmark {
+                font-size: 80px;
+            }
+            
+            .countdown-circle {
+                width: 80px;
+                height: 80px;
+                font-size: 28px;
+            }
+            
+            .progress-bar {
+                width: 250px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkmark">✓</div>
+        
+        <h1 class="title fade-in">Thank You for Taking Our Survey</h1>
+        
+        <p class="subtitle fade-in">Your feedback is valuable to us.</p>
+        
+        <p class="redirect-text fade-in">Redirecting to login page in <span id="timeText">5</span> seconds...</p>
+        
+        <div class="countdown-container fade-in">
+            <div class="countdown-circle" id="countdown">5</div>
+        </div>
+        
+        <div class="progress-bar fade-in">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <a href="#" class="skip-link fade-in" onclick="redirectNow()">Skip and Go Now</a>
+    </div>
+
+    <script>
+        let timeLeft = 5;
+        const countdownElement = document.getElementById('countdown');
+        const timeTextElement = document.getElementById('timeText');
+        
+        function updateCountdown() {
+            countdownElement.textContent = timeLeft;
+            timeTextElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                redirectToLogin();
+            } else {
+                timeLeft--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+        
+        function redirectToLogin() {
+            window.location.href = '/login';
+        }
+        
+        function redirectNow() {
+            redirectToLogin();
+        }
+        
+        // Start countdown when page loads
+        setTimeout(updateCountdown, 1000);
+        
+        // Add staggered fade-in animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach((element, index) => {
+            element.style.animationDelay = `${index * 0.2}s`;
+        });
+    </script>
+</body>
+</html>

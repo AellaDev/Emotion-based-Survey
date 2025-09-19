@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Login - CHMSU-A Evaluation System{% endblock %}
+
+{% block content %}
+<div class="login-card">
+    <h2 class="system-title" style="font-family: 'Lilita One', cursive;">CHMSU-A<br>Evaluation System</h2>
+    <p class="system-subtitle">Emotion-Driven Feedback System</p>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'error' else category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+            <label for="role" class="form-label">Select Role:</label>
+            <select id="role" name="role" class="form-control form-select" required>
+                <option value="">--Select role--</option>
+                <option value="Student">Student</option>
+                <option value="Admin">Admin</option>
+            </select>
+        </div>
+
+        <div id="passwordField" class="form-group password-field">
+            <label for="password" class="form-label">Enter Admin Password:</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Enter admin password">
+        </div>
+
+        <button type="submit" class="btn-login">Log In</button>
+    </form>
+</div>
+{% endblock %}
